@@ -1,41 +1,35 @@
+import sys
+input = sys.stdin.readline
 
-from collections import deque
-q = deque()
+n = int(input())
+matrix = []
+visited = [0] * int(n+1)
 
-n, m = map(int, input().split())
-
-miro = []
-cnt = 0
+#ans로 중간에 빠져나가기 & 최솟값처리 생각 못함
+ans = 999999999
 
 for i in range(n):
-    a = list(map(int, str(input())))
-    miro.append(a)
+    matrix.append(list(map(int,input().split())))
     
-    #왼 오 위 아래
-dx = [-1, 1, 0, 0]
-dy = [0, 0, 1, -1]
-
-#for i in range(n):
-#    for j in range(m):
-#        if miro[i][j] == 1:
-#            q.append([i,j])
-q.append([0,0])
-
-while q:
-    [x, y] = q.popleft()
-    for i in range(4):
-        mx = x + dx[i]
-        my = y + dy[i]
-        
-        if mx < 0 or mx >= n or my < 0 or my >= m:
-            continue
-        
-        if miro[mx][my] == 0:
-            continue
-        
-        if miro[mx][my] == 1:
-            miro[mx][my] = miro[x][y] + 1
-            q.append([mx, my])
-                
-
-print(miro[n-1][m-1])
+def dfs(start, next, value, visited):
+    global ans
+    if value > ans:
+        return
+    
+    if sum(visited) == n:
+        if matrix[next][start]:
+            ans = min(ans, value + matrix[next][start])
+    
+    for i in range(n):
+        if matrix[next][i] != 0 and visited[i] == 0:
+            visited[i] = 1
+            dfs(start, i, value + matrix[next][i], visited)
+            visited[i] = 0
+            
+for i in range(n):
+    visited[i] = 1
+    dfs(i,i,0,visited)
+    visited[i] = 0
+    
+    
+print(ans)
