@@ -1,25 +1,20 @@
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10**7)
 
-t = int(input())
+n = int(input())
+a = []
 
-def dfs(now):
-    visited[now] = 1
-    next = arr[now]
-    if visited[now] == 0:
-        dfs(next)
+for _ in range(n):
+    a.append(list(map(int, input().split())))
+
+a = sorted(a, key = lambda x: (x[0], x[1]))
+
+end = 0
+cnt = 1
+
+for i in range(n):
+    if a[i][0] >= end:
+        cnt += 1
+        end = a[i][1]
         
-for i in range(t):
-    ans = 0
-    n = int(input())
-    arr = [0] + list(map(int, input().split()))
-    visited = [0] * (n+1)
-    
-    for i in range(1, n+1):
-        if visited[i] == 0:
-            dfs(i)
-            ans += 1
-            
-    pinrt(ans)
-    
+print(cnt)
